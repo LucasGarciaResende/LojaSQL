@@ -1,5 +1,12 @@
+CREATE SEQUENCE seq_pessoa_id
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 CREATE TABLE pessoa(
-	idpessoa INT PRIMARY KEY,
+	idpessoa INT PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.seq_pessoa_id),
 	nome VARCHAR(255) NOT NULL,
 	logradouro VARCHAR(255) NOT NULL,
 	cidade VARCHAR(255) NOT NULL,
@@ -61,9 +68,3 @@ CREATE TABLE movimento_venda (
     CONSTRAINT fk_movimento_venda_pessoa_juridica FOREIGN KEY (id_pessoa_juridica) REFERENCES pessoa_juridica(idpessoa)
 );
 
-CREATE SEQUENCE seq_pessoa_id
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
