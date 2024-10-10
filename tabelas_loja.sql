@@ -1,12 +1,5 @@
-CREATE SEQUENCE seq_pessoa_id
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
 CREATE TABLE pessoa(
-	idpessoa INT PRIMARY KEY DEFAULT (NEXT VALUE FOR dbo.seq_pessoa_id),
+	idpessoa INT PRIMARY KEY,
 	nome VARCHAR(255) NOT NULL,
 	logradouro VARCHAR(255) NOT NULL,
 	cidade VARCHAR(255) NOT NULL,
@@ -40,31 +33,22 @@ CREATE TABLE usuario (
 	senha VARCHAR(255)
 );
 
-CREATE TABLE movimento (
-    idmovimento INT PRIMARY KEY,
-	usuario INT NOT NULL,
-    idproduto INT NOT NULL,
-    quantidade INT NOT NULL,
-	tipo CHAR(1),
-	CONSTRAINT fk_movimento_produto FOREIGN KEY (idproduto) REFERENCES produto(idproduto),
-	CONSTRAINT fk_usuario FOREIGN KEY (usuario) REFERENCES usuario(idusuario)
-);
+CREATE TABLE movimento(
+	idmovimento INT PRIMARY KEY NOT NULL,
+	idusuario INT NOT NULL,
+	idpessoa INT NOT NULL,
+	idproduto INT NOT NULL,
+	quantidade INT NOT NULL,
+	tipo CHAR(1) NULL,
+	valor_unitario NUMERIC NOT NULL
+	CONSTRAINT fk_usuario FOREIGN KEY (idusuario) REFERENCES usuario(idusuario),
+	CONSTRAINT fk_pessoa FOREIGN KEY (idpessoa) REFERENCES pessoa(idpessoa),
+	CONSTRAINT fk_produto FOREIGN KEY (idproduto) REFERENCES produto(idproduto)
+)
 
-CREATE TABLE movimento_compra (
-    idmovimento INT PRIMARY KEY,
-    id_pessoa_fisica INT NOT NULL,
-    id_pessoa_juridica INT NOT NULL,
-    CONSTRAINT fk_movimento_compra FOREIGN KEY (idmovimento) REFERENCES movimento(idmovimento),
-    CONSTRAINT fk_movimento_compra_pessoa_fisica FOREIGN KEY (id_pessoa_fisica) REFERENCES pessoa_fisica(idpessoa),
-    CONSTRAINT fk_movimento_compra_pessoa_juridica FOREIGN KEY (id_pessoa_juridica) REFERENCES pessoa_juridica(idpessoa)
-);
-
-CREATE TABLE movimento_venda (
-    idmovimento INT PRIMARY KEY,
-    id_pessoa_fisica INT NOT NULL,
-    id_pessoa_juridica INT NOT NULL,
-    CONSTRAINT fk_movimento_venda FOREIGN KEY (idmovimento) REFERENCES movimento(idmovimento),
-    CONSTRAINT fk_movimento_venda_pessoa_fisica FOREIGN KEY (id_pessoa_fisica) REFERENCES pessoa_fisica(idpessoa),
-    CONSTRAINT fk_movimento_venda_pessoa_juridica FOREIGN KEY (id_pessoa_juridica) REFERENCES pessoa_juridica(idpessoa)
-);
-
+CREATE SEQUENCE seq_pessoa_id
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
